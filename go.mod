@@ -1,4 +1,4 @@
-module github.com/victorsteven/fullstack
+module github.com/netScaP/go_blog
 
 go 1.13
 

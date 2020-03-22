@@ -9,12 +9,13 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/victorsteven/fullstack/api/auth"
-	"github.com/victorsteven/fullstack/api/models"
-	"github.com/victorsteven/fullstack/api/responses"
-	"github.com/victorsteven/fullstack/api/utils/formaterror"
+	"github.com/netScaP/go_blog/api/auth"
+	"github.com/netScaP/go_blog/api/models"
+	"github.com/netScaP/go_blog/api/responses"
+	"github.com/netScaP/go_blog/api/utils/formaterror"
 )
 
+// CreatePost ...
 func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -53,18 +54,19 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, postCreated)
 }
 
+// GetPosts ...
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 
 	post := models.Post{}
 
-	posts, err := post.FindAllPosts(server.DB)
+	response, err := post.FindPosts(server.DB, &models.PostQueryStruct{Limit: 10, Skip: 0})
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
-		return
 	}
-	responses.JSON(w, http.StatusOK, posts)
+	responses.JSON(w, http.StatusOK, response)
 }
 
+// GetPost ...
 func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -83,6 +85,7 @@ func (server *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, postReceived)
 }
 
+// UpdatePost ...
 func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -144,7 +147,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 
 	postUpdate.ID = post.ID //this is important to tell the model the post id to update, the other update field are set above
 
-	postUpdated, err := postUpdate.UpdateAPost(server.DB)
+	postUpdated, err := postUpdate.UpdatePost(server.DB)
 
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -154,6 +157,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, postUpdated)
 }
 
+// DeletePost ...
 func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -185,7 +189,7 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-	_, err = post.DeleteAPost(server.DB, pid, uid)
+	_, err = post.DeletePost(server.DB, pid, uid)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

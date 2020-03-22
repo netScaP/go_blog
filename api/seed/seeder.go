@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/jinzhu/gorm"
-	"github.com/victorsteven/fullstack/api/models"
+	"github.com/netScaP/go_blog/api/models"
 )
 
 var users = []models.User{
@@ -20,24 +20,37 @@ var users = []models.User{
 	},
 }
 
+var tags = []models.Tag{
+	models.Tag{
+		Name: "Tag 1",
+	},
+	models.Tag{
+		Name: "Tag 2",
+	},
+}
+
 var posts = []models.Post{
 	models.Post{
 		Title:   "Title 1",
 		Content: "Hello world 1",
+		Tags: tags,
 	},
 	models.Post{
 		Title:   "Title 2",
 		Content: "Hello world 2",
+		Tags: tags[0:1],
 	},
 }
 
+
+// Load ...
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.Post{}, &models.User{}).Error
+	err := db.Debug().DropTableIfExists(&models.Post{}, &models.User{}, &models.Tag{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
-	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}).Error
+	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Tag{}).Error
 	if err != nil {
 		log.Fatalf("cannot migrate table: %v", err)
 	}
@@ -49,7 +62,7 @@ func Load(db *gorm.DB) {
 		}
 	*/
 
-	for i, _ := range users {
+	for i := range users {
 		err = db.Debug().Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
 			log.Fatalf("cannot seed users table: %v", err)

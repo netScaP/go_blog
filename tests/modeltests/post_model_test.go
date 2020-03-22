@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/victorsteven/fullstack/api/models"
+	"github.com/netScaP/go_blog/api/models"
 	"gopkg.in/go-playground/assert.v1"
 )
 
@@ -77,7 +77,7 @@ func TestGetPostByID(t *testing.T) {
 	assert.Equal(t, foundPost.Content, post.Content)
 }
 
-func TestUpdateAPost(t *testing.T) {
+func TestUpdatePost(t *testing.T) {
 
 	err := refreshUserAndPostTable()
 	if err != nil {
@@ -93,7 +93,7 @@ func TestUpdateAPost(t *testing.T) {
 		Content:  "modiupdate@gmail.com",
 		AuthorID: post.AuthorID,
 	}
-	updatedPost, err := postUpdate.UpdateAPost(server.DB)
+	updatedPost, err := postUpdate.UpdatePost(server.DB)
 	if err != nil {
 		t.Errorf("this is the error updating the user: %v\n", err)
 		return
@@ -104,7 +104,7 @@ func TestUpdateAPost(t *testing.T) {
 	assert.Equal(t, updatedPost.AuthorID, postUpdate.AuthorID)
 }
 
-func TestDeleteAPost(t *testing.T) {
+func TestDeletePost(t *testing.T) {
 
 	err := refreshUserAndPostTable()
 	if err != nil {
@@ -114,7 +114,7 @@ func TestDeleteAPost(t *testing.T) {
 	if err != nil {
 		log.Fatalf("Error Seeding tables")
 	}
-	isDeleted, err := postInstance.DeleteAPost(server.DB, post.ID, post.AuthorID)
+	isDeleted, err := postInstance.DeletePost(server.DB, post.ID, post.AuthorID)
 	if err != nil {
 		t.Errorf("this is the error deleting the user: %v\n", err)
 		return

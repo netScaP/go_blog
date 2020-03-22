@@ -8,8 +8,8 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
-	"github.com/victorsteven/fullstack/api/controllers"
-	"github.com/victorsteven/fullstack/api/models"
+	"github.com/netScaP/go_blog/api/controllers"
+	"github.com/netScaP/go_blog/api/models"
 )
 
 var server = controllers.Server{}
@@ -129,7 +129,7 @@ func seedUsers() ([]models.User, error) {
 			Password: "password",
 		},
 	}
-	for i, _ := range users {
+	for i := range users {
 		err := server.DB.Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
 			return []models.User{}, err
@@ -209,7 +209,7 @@ func seedUsersAndPosts() ([]models.User, []models.Post, error) {
 		},
 	}
 
-	for i, _ := range users {
+	for i := range users {
 		err = server.DB.Model(&models.User{}).Create(&users[i]).Error
 		if err != nil {
 			log.Fatalf("cannot seed users table: %v", err)

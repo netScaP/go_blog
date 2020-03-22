@@ -9,12 +9,13 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/victorsteven/fullstack/api/auth"
-	"github.com/victorsteven/fullstack/api/models"
-	"github.com/victorsteven/fullstack/api/responses"
-	"github.com/victorsteven/fullstack/api/utils/formaterror"
+	"github.com/netScaP/go_blog/api/auth"
+	"github.com/netScaP/go_blog/api/models"
+	"github.com/netScaP/go_blog/api/responses"
+	"github.com/netScaP/go_blog/api/utils/formaterror"
 )
 
+// CreateUser ...
 func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -46,6 +47,7 @@ func (server *Server) CreateUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, userCreated)
 }
 
+// GetUsers ...
 func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 	user := models.User{}
@@ -58,6 +60,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, users)
 }
 
+// GetUser ...
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -75,6 +78,7 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
+// UpdateUser ...
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -109,15 +113,17 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	updatedUser, err := user.UpdateAUser(server.DB, uint32(uid))
+	updatedUser, err := user.UpdateUser(server.DB, uint32(uid))
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
 		return
 	}
+
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
+// DeleteUser ...
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
@@ -138,7 +144,7 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
-	_, err = user.DeleteAUser(server.DB, uint32(uid))
+	_, err = user.DeleteUser(server.DB, uint32(uid))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return

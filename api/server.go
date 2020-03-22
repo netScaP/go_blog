@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/victorsteven/fullstack/api/controllers"
-	"github.com/victorsteven/fullstack/api/seed"
+	"github.com/netScaP/go_blog/api/controllers"
+	"github.com/netScaP/go_blog/api/seed"
 )
 
 var server = controllers.Server{}
@@ -19,6 +19,7 @@ func init() {
 	}
 }
 
+// Run ...
 func Run() {
 
 	var err error
@@ -29,7 +30,8 @@ func Run() {
 		fmt.Println("We are getting the env values")
 	}
 
-	server.Initialize(os.Getenv("DB_DRIVER"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
+	fmt.Println(os.Getenv("DB_USER"))
+	server.Initialize(os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_PORT"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
 
 	seed.Load(server.DB)
 

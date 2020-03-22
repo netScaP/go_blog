@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/victorsteven/fullstack/api/auth"
-	"github.com/victorsteven/fullstack/api/models"
-	"github.com/victorsteven/fullstack/api/responses"
-	"github.com/victorsteven/fullstack/api/utils/formaterror"
+	"github.com/netScaP/go_blog/api/auth"
+	"github.com/netScaP/go_blog/api/models"
+	"github.com/netScaP/go_blog/api/responses"
+	"github.com/netScaP/go_blog/api/utils/formaterror"
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Login ...
 func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -40,6 +41,7 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, token)
 }
 
+// SignIn ...
 func (server *Server) SignIn(email, password string) (string, error) {
 
 	var err error
