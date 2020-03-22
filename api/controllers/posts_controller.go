@@ -57,9 +57,19 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 // GetPosts ...
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
 
+	keys := r.URL.Query()
 	post := models.Post{}
 
-	response, err := post.FindPosts(server.DB, &models.PostQueryStruct{Limit: 10, Skip: 0})
+	var limit uint64 = 10
+	var skip uint64 = 0
+	if keyLimit, ok := keys["limit"]; ok && len(keyLimit) > 0 {
+		limit, _ = strconv.ParseUint(keyLimit[0], 10, 64)
+	}
+	if keySkip, ok := keys["skip"]; ok && len(keySkip) > 0 {
+		skip, _ = strconv.ParseUint(keySkip[0], 10, 64)
+	}
+
+	response, err := post.FindPosts(server.DB, &models.PostQueryStruct{Limit: limit, Skip: skip})
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 	}
